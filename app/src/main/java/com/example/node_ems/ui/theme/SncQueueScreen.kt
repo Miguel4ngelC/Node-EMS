@@ -1,6 +1,5 @@
 package com.example.node_ems.ui.theme
 
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -29,11 +28,10 @@ fun SyncQueueScreen() {
             onClick = {
                 if (!isSyncing) {
                     isSyncing = true
-                    // Simula una tarea en segundo plano
                     coroutineScope.launch {
                         for (i in 1..100) {
                             notificationHelper.showProgress(i)
-                            delay(50) // Pausa de 50 milisegundos para que se vea la animación
+                            delay(50)
                         }
                         isSyncing = false
                     }
@@ -43,8 +41,7 @@ fun SyncQueueScreen() {
         ) {
             Text(if (isSyncing) "Sincronizando..." else "Sincronizar Lote ePCR")
         }
-
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Desliza la barra de estado hacia abajo al presionar el botón")
+        Text(text = "Desliza la barra de estado hacia abajo al presionar el boton")
     }
 }
