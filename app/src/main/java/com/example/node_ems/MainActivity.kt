@@ -23,14 +23,18 @@ import com.example.node_ems.ui.theme.NodeEMSTheme
 
 class MainActivity : ComponentActivity() {
 
+    // 1. SEGURIDAD: Prepara el sistema para pedir permisos (Notificaciones)
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { _ -> /* Manejo del permiso */ }
 
+    // 2. PUNTO DE ENTRADA: Metodo principal al arrancar la app
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        askNotificationPermission()
 
+        askNotificationPermission() // Valida permisos de inmediato
+
+        // 3. INTERFAZ: Inicia Jetpack Compose inyectando el tema visual de Node-EMS
         setContent {
             NodeEMSTheme {
                 MainScreen()
@@ -48,8 +52,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen() {
+    // 4. ESTADO REACTIVO: Guarda qué pestaña está activa (0=Turno, 1=ePCR, 2=Sync)
     var selectedScreen by remember { mutableIntStateOf(0) }
 
+    // 5. ESTRUCTURA UI: Scaffold encargado de la barra de navegación inferior
     Scaffold(
         bottomBar = {
             NavigationBar {
@@ -75,6 +81,7 @@ fun MainScreen() {
         }
     ) { innerPadding ->
         Surface(modifier = Modifier.padding(innerPadding)) {
+            // 6. RENDERIZADO DINÁMICO: Carga la vista correcta sin recargar toda la app
             when (selectedScreen) {
                 0 -> DashboardScreen()
                 1 -> FormScreen()
