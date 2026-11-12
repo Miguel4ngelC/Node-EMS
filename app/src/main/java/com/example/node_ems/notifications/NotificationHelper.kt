@@ -16,7 +16,6 @@ class NotificationHelper(private val context: Context) {
         createNotificationChannel()
     }
 
-
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -30,15 +29,19 @@ class NotificationHelper(private val context: Context) {
         }
     }
 
-    // Esta es la función estrella de tu demo
     fun showProgress(progress: Int) {
         val builder = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(android.R.drawable.stat_sys_upload) // Icono genérico de subida de Android
-            .setContentTitle("Sincronizando ePCR - Folio #4092")
-            .setContentText(if (progress == 100) "Sincronización completada" else "Subiendo datos: $progress%")
+            .setSmallIcon(if (progress == 100) android.R.drawable.stat_sys_download_done else android.R.drawable.stat_sys_upload)
+            .setContentTitle(if (progress == 100) "¡Lote ePCR Sincronizado!" else "Sincronizando ePCR - Lote 3 folios")
+            .setContentText(if (progress == 100) "Sincronización completada con éxito." else "Subiendo datos: $progress%")
             .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setOngoing(progress < 100) // Si es menor a 100, el usuario no puede deslizar la notificación para borrarla
-            .setProgress(100, progress, false) // 100 es el máximo, progress es el actual, false es para que sea determinada
+            .setOngoing(progress < 100)
+
+        if (progress < 100) {
+            builder.setProgress(100, progress, false) // Muestra progreso
+        } else {
+            builder.setProgress(0, 0, false) // Oculta la barra al terminar
+        }
 
         notificationManager.notify(notificationId, builder.build())
     }
